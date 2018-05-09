@@ -22,7 +22,13 @@ request({
     json: true
 }, 
 (error, response, body) => {
-    if(body){
+    if(error){
+        console.log('Something went wrong');
+    }
+    else if(body.status === 'ZERO_RESULTS'){
+        console.log('Unable to find address');
+    }
+    else if(body.status === 'OK'){
         console.log(`Address: ${body.results[0].formatted_address}`);
         console.log(`Lattitude: ${body.results[0].geometry.location.lat}`);
         console.log(`Longtitude: ${body.results[0].geometry.location.lng}`);
