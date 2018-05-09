@@ -1,45 +1,34 @@
-// const yargs = require('yargs');
+const yargs = require('yargs');
 
-// const geocode = require('./geocode/geocode');
+const geocode = require('./geocode/geocode');
+const weather = require('./weather/weather');
 
-// const argv = yargs
-//     .options({
-//         a: {
-//                 demand: true,
-//                 alias: 'address',
-//                 describe: 'Address to fetch weather for',
-//                 string: true //parse input as string
-//         }
-//     })
-//     .help()
-//     .alias('help', 'h')
-//     .argv;
+const argv = yargs
+    .options({
+        a: {
+                demand: true,
+                alias: 'address',
+                describe: 'Address to fetch weather for',
+                string: true //parse input as string
+        }
+    })
+    .help()
+    .alias('help', 'h')
+    .argv;
 
-// geocode.geocodeAddress(argv.address, (errorMessage, results) => {
-//     if(errorMessage){
-//         console.log(errorMessage);
-//     }
-//     else{
-//         console.log(JSON.stringify(results, undefined, 2));
-//     }
-// });
-
-const request = require('request');
-
-request({
-    url: `https://api.forecast.io/forecast/f648e9f1d20496f6cc4979508ef4a36c/32.0852999,34.78176759999999`,
-    json: true
-}, 
-(error, response, body) => {
-    if(!error && response.statusCode === 200){
-        console.log(body.currently.temperature);
-        console.log(body.currently.summary);
+geocode.geocodeAddress(argv.address, (errorMessage, results) => {
+    if(errorMessage){
+        console.log(errorMessage);
     }
-    else {
-        console.log('Unable to fetch weather');
+    else{
+        console.log(JSON.stringify(results, undefined, 2));
+        weather.getWeather(results.lattitude, results.longtitude, (errorMessage, weatherResults) => {
+            if(errorMessage){
+                console.log(errorMessage);
+            }
+            else{
+                console.log(`The temperatures is ${weatherResults.temperature}, it feels like ${weatherResults.apparentTemperature}`);
+            }
+        });
     }
-
 });
-
-//forecast.io api key: f648e9f1d20496f6cc4979508ef4a36c
-//https://api.forecast.io/forecast/f648e9f1d20496f6cc4979508ef4a36c/32.0852999,34.78176759999999
