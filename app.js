@@ -15,11 +15,10 @@ const argv = yargs
     .argv;
 
 var address = encodeURIComponent(argv.a);
-var baseUrl = 'https://maps.googleapis.com/maps/api/geocode/json?address=';
 var devToken = '&key=AIzaSyC8pwwyrSBa-RJ1DL_ZyEkQJ14MISqGgA0';
 
 request({
-    url: baseUrl+address+devToken,
+    url: `https://maps.googleapis.com/maps/api/geocode/json?address=${address}${devToken}`,
     json: true
 }, 
 (error, response, body) => {
